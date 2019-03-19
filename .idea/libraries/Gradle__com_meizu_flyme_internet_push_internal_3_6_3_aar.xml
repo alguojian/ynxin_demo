@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.meizu.flyme.internet:push-internal:3.6.3@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/push-internal-3.6.3.aar/bc57ac530eec7d4e77d5c7587c9761af/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/push-internal-3.6.3.aar/bc57ac530eec7d4e77d5c7587c9761af/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/push-internal-3.6.3.aar/af106ad5cc89b7204f7c3e05039a7991/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/push-internal-3.6.3.aar/af106ad5cc89b7204f7c3e05039a7991/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.meizu.flyme.internet/push-internal/3.6.3/b6ab741cbf45d8b0815b32c661a317e4c3ab76b3/push-internal-3.6.3-javadoc.jar!/" />

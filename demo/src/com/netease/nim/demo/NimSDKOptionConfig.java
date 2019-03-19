@@ -75,8 +75,6 @@ class NimSDKOptionConfig {
         // 云信私有化配置项
         configServerAddress(options, context);
 
-        options.mixPushConfig = buildMixPushConfig();
-
 //        options.mNosTokenSceneConfig = createNosTokenScene();
 
         options.loginCustomTag = "登录自定义字段";
@@ -194,28 +192,4 @@ class NimSDKOptionConfig {
             return MessageRevokeTip.getRevokeTipContent(item, revokeAccount);
         }
     };
-
-    private static MixPushConfig buildMixPushConfig() {
-
-        // 第三方推送配置
-        MixPushConfig config = new MixPushConfig();
-
-        // 小米推送
-        config.xmAppId = "2882303761517502883";
-        config.xmAppKey = "5671750254883";
-        config.xmCertificateName = "DEMO_MI_PUSH";
-
-        // 华为推送
-        config.hwCertificateName = "DEMO_HW_PUSH";
-
-        // 魅族推送
-        config.mzAppId = "111710";
-        config.mzAppKey = "282bdd3a37ec4f898f47c5bbbf9d2369";
-        config.mzCertificateName = "DEMO_MZ_PUSH";
-
-        // fcm 推送，适用于海外用户，不使用fcm请不要配置
-        config.fcmCertificateName = "DEMO_FCM_PUSH";
-
-        return config;
-    }
 }

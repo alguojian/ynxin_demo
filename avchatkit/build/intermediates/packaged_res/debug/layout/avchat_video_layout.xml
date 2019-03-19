@@ -29,7 +29,6 @@
 
     <include
         android:id="@+id/avchat_video_face_unity"
-        layout="@layout/faceu_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/avchat_video_bottom_control"/>

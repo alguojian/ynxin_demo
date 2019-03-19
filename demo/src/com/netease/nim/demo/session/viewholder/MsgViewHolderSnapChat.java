@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.netease.nim.demo.R;
-import com.netease.nim.demo.session.activity.WatchSnapChatPictureActivity;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
@@ -86,8 +85,6 @@ public class MsgViewHolderSnapChat extends MsgViewHolderBase {
                 case MotionEvent.ACTION_CANCEL:
                     v.getParent().requestDisallowInterceptTouchEvent(false);
 
-                    WatchSnapChatPictureActivity.destroy();
-
                     // 删除这条消息，当然你也可以将其标记为已读，同时删除附件内容，然后不让再查看
                     if (isLongClick && message.getAttachStatus() == AttachStatusEnum.transferred) {
                         // 物理删除
@@ -108,7 +105,6 @@ public class MsgViewHolderSnapChat extends MsgViewHolderBase {
     @Override
     protected boolean onItemLongClick() {
         if (message.getStatus() == MsgStatusEnum.success) {
-            WatchSnapChatPictureActivity.start(context, message);
             isLongClick = true;
             return true;
         }

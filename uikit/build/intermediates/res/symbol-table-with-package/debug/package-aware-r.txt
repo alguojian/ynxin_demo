@@ -1557,7 +1557,6 @@ id visible
 id voice_trans_layout
 id voice_trans_text
 id watch_image_view
-id watch_picture_activity_layout
 id wrap
 id wrap_content
 id yixin_profile_buddy_operations
@@ -1713,7 +1712,6 @@ layout nim_voice_trans_layout
 layout nim_watch_media_download_progress_layout
 layout nim_watch_pic_video_menu_activity
 layout nim_watch_picture_activity
-layout nim_watch_snapchat_activity
 layout nim_watch_video_activity
 layout nim_zbra_loading_progress_bar
 layout notification_action

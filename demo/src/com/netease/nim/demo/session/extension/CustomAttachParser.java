@@ -29,15 +29,7 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.Sticker:
                     attachment = new StickerAttachment();
                     break;
-                case CustomAttachmentType.RTS:
-                    attachment = new RTSAttachment();
-                    break;
-                case CustomAttachmentType.RedPacket:
-                    attachment = new RedPacketAttachment();
-                    break;
-                case CustomAttachmentType.OpenedRedPacket:
-                    attachment = new RedPacketOpenedAttachment();
-                    break;
+
                 default:
                     attachment = new DefaultCustomAttachment();
                     break;

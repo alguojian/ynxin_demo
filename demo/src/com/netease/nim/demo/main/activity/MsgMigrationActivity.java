@@ -1,19 +1,14 @@
 package com.netease.nim.demo.main.activity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.netease.nim.demo.R;
-import com.netease.nim.demo.session.extension.RTSAttachment;
-import com.netease.nim.demo.session.extension.RedPacketAttachment;
-import com.netease.nim.demo.session.extension.RedPacketOpenedAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
-import com.netease.nim.rtskit.common.dialog.EasyAlertDialog;
 import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.common.CommonUtil;
 import com.netease.nim.uikit.common.ToastHelper;
@@ -68,7 +63,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
 
     private static final String TAG = "MsgMigrationActivity";
 
-    private EasyAlertDialog easyAlertDialog;
 
     private View actionContainer;
     private View processContainer;
@@ -165,12 +159,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
                 exportMsg();
             }
         };
-
-        showAlterDialog("确定导出本地消息？",
-                "本地消息将存至云端，会耗费较长时间",
-                "返回", clickDismissListener,
-                "继续导出", positiveListener);
-
     }
 
     private void showImportDialog() {
@@ -182,11 +170,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
                 importMsg();
             }
         };
-
-        showAlterDialog("确定导入本地消息？",
-                "此过程需要较长时间",
-                "返回", clickDismissListener,
-                "继续导入", positiveListener);
 
     }
 
@@ -377,11 +360,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
         };
 
 
-        showAlterDialog(isExport ? "导出失败" : "导入失败",
-                msg,
-                "返回", negativeListener,
-                isExport ? "重新导出" : "重新导入", positiveListener);
-
     }
 
 
@@ -395,10 +373,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
             }
         };
 
-        showAlterDialog(isExport ? "确定取消导出？" : "确定取消导入？",
-                null,
-                isExport ? "取消导出" : "取消导入", negativeListener,
-                isExport ? "继续导出" : "继续导入", clickDismissListener);
     }
 
     private void cancel(AbortableFuture abortableFuture) {
@@ -410,43 +384,11 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
     }
 
 
-    private void dismissDialog() {
-        if (easyAlertDialog != null) {
-            easyAlertDialog.dismiss();
-            easyAlertDialog = null;
-        }
-    }
 
-
-    private void showAlterDialog(String title,
-                                 String message,
-                                 String negativeText, View.OnClickListener negativeListener,
-                                 String positiveText, View.OnClickListener positiveListener) {
-
-        if (paused) {
-            return;
-        }
-        dismissDialog();
-        easyAlertDialog = new EasyAlertDialog(this);
-        easyAlertDialog.setTitle(title);
-        easyAlertDialog.setCancelable(false);
-        if (!TextUtils.isEmpty(message)) {
-            easyAlertDialog.setMessage(message);
-        }
-        if (!TextUtils.isEmpty(negativeText)) {
-            easyAlertDialog.addNegativeButton(negativeText, negativeListener);
-        }
-
-        if (!TextUtils.isEmpty(positiveText)) {
-            easyAlertDialog.addPositiveButton(positiveText, positiveListener);
-        }
-        easyAlertDialog.show();
-    }
 
 
     @Override
     protected void onDestroy() {
-        dismissDialog();
         super.onDestroy();
     }
 
@@ -470,7 +412,6 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            dismissDialog();
         }
     }
 
@@ -497,11 +438,8 @@ public class MsgMigrationActivity extends UI implements View.OnClickListener {
                 }
 
                 //  过滤 白板、贴图、阅后即焚、红包消息。
-                if (attachment instanceof RTSAttachment ||
-                        attachment instanceof StickerAttachment ||
-                        attachment instanceof SnapChatAttachment ||
-                        attachment instanceof RedPacketAttachment ||
-                        attachment instanceof RedPacketOpenedAttachment) {
+                if (attachment instanceof StickerAttachment ||
+                        attachment instanceof SnapChatAttachment ) {
                     iterator.remove();
                 }
             }
