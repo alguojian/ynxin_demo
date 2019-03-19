@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/avchatkit/avchatkit.iml" filepath="$PROJECT_DIR$/avchatkit/avchatkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nim_demo.iml" filepath="$PROJECT_DIR$/nim_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/uikit/uikit.iml" filepath="$PROJECT_DIR$/uikit/uikit.iml" />
       <module fileurl="file://$PROJECT_DIR$/ynxin_demo.iml" filepath="$PROJECT_DIR$/ynxin_demo.iml" />
     </modules>
