@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="fastjson-1.1.34.android (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/avchatkit/libs/fastjson-1.1.34.android.jar!/" />
+      <root url="jar://$PROJECT_DIR$/avchatkit/libs/nim-avchat-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/avchatkit/libs/nim-basesdk-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/avchatkit/libs/nrtc-sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

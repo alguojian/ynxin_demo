@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="fastjson-1.1.34.android">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/uikit/libs/fastjson-1.1.34.android.jar!/" />
+      <root url="jar://$PROJECT_DIR$/uikit/libs/java-json.jar!/" />
+      <root url="jar://$PROJECT_DIR$/uikit/libs/nim-basesdk-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/uikit/libs/nim-chatroom-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/uikit/libs/nim-lucene-6.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/uikit/libs/java-json.jar!/" />
+    </SOURCES>
+  </library>
+</component>

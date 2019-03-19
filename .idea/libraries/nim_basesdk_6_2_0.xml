@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="nim-basesdk-6.2.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/rtskit/libs/nim-basesdk-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rtskit/libs/nim-rts-6.2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

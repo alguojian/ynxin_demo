@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="AMap2DMap_3.0.0_AMapSearch_3.6.1_AMapLocation_3.2.1_20161228">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/demo/libs/AMap2DMap_3.0.0_AMapSearch_3.6.1_AMapLocation_3.2.1_20161228.jar!/" />
+      <root url="jar://$PROJECT_DIR$/demo/libs/MiPush_SDK_Client_3_6_2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/demo/libs/nim-avchat-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/demo/libs/nim-push-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/demo/libs/nim-rts-6.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/demo/libs/nrtc-sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
