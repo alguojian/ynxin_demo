@@ -21,6 +21,7 @@ import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.item.ItemTypes;
 import com.netease.nim.uikit.business.contact.core.model.ContactDataAdapter;
 import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
+import com.socks.library.KLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

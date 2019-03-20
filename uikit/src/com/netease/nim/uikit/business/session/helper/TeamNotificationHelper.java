@@ -171,6 +171,7 @@ public class TeamNotificationHelper {
             } else if (field.getKey() == TeamFieldEnum.Announcement) {
                 sb.append(TeamHelper.getTeamMemberDisplayNameYou(tid, account) + " 修改了群公告");
             } else if (field.getKey() == TeamFieldEnum.VerifyType) {
+                // TODO: 2019/3/20 默认创建群之后，设置为任何人可以加入，不在通知群,不通知目前没有找到发消息的地方，现阶段修改文案
                 VerifyTypeEnum type = (VerifyTypeEnum) field.getValue();
                 String authen = "群身份验证权限更新为";
                 if (type == VerifyTypeEnum.Free) {
@@ -214,9 +215,9 @@ public class TeamNotificationHelper {
 
     private static String buildManagerPassTeamApplyNotification(MemberChangeAttachment a) {
         StringBuilder sb = new StringBuilder();
-        sb.append("管理员通过用户 ");
+        sb.append("欢迎新同学 ");
         sb.append(buildMemberListString(a.getTargets(), null));
-        sb.append(" 的入群申请");
+        sb.append(" 的加入");
 
         return sb.toString();
     }

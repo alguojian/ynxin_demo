@@ -45,6 +45,7 @@ public class PreviewImageFromCameraActivity extends UI {
 
     private String btnText;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nim_preview_image_from_camera_activity);

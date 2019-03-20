@@ -337,13 +337,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity
-            android:name=".main.activity.MsgMigrationActivity"
-            android:configChanges="orientation"
-            android:label="@string/local_db_migration"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
 
         <!-- 声明云信后台服务 -->

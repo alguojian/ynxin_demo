@@ -23,6 +23,7 @@ public class DefaultRecentCustomization extends RecentCustomization {
      * @param recent 最近联系人
      * @return 默认文案
      */
+    @Override
     public String getDefaultDigest(RecentContact recent) {
         switch (recent.getMsgType()) {
             case text:

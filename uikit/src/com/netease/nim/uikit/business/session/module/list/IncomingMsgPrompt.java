@@ -15,6 +15,7 @@ import com.netease.nim.uikit.business.session.helper.TeamNotificationHelper;
 import com.netease.nim.uikit.common.ui.imageview.HeadImageView;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseFetchLoadAdapter;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.socks.library.KLog;
 
 /**
  * 新消息提醒模块
@@ -53,8 +54,15 @@ public class IncomingMsgPrompt {
             newMessageTipHeadImageView.resetImageView();
         }
 
-        MoonUtil.identifyFaceExpression(context, newMessageTipTextView, TeamNotificationHelper.getMsgShowText(newMessage),
-                ImageSpan.ALIGN_BOTTOM);
+        String msgShowText = TeamNotificationHelper.getMsgShowText(newMessage);
+
+        if (TextUtils.isEmpty(msgShowText)){
+             KLog.d("asdfghjkl","创建群后获得提示文案");
+            newMessageTipLayout.setVisibility(View.GONE);
+            return;
+        }
+
+        MoonUtil.identifyFaceExpression(context, newMessageTipTextView,msgShowText , ImageSpan.ALIGN_BOTTOM);
         newMessageTipLayout.setVisibility(View.VISIBLE);
         uiHandler.removeCallbacks(showNewMessageTipLayoutRunnable);
         uiHandler.postDelayed(showNewMessageTipLayoutRunnable, 5 * 1000);

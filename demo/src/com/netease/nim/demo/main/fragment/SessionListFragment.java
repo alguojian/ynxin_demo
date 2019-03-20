@@ -5,21 +5,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.netease.nim.uikit.common.ToastHelper;
-
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.config.preference.Preferences;
 import com.netease.nim.demo.login.LoginActivity;
 import com.netease.nim.demo.login.LogoutHelper;
 import com.netease.nim.demo.main.activity.MultiportActivity;
+import com.netease.nim.demo.main.activity.SystemMessageActivity;
+import com.netease.nim.demo.main.helper.SystemMessageUnreadManager;
 import com.netease.nim.demo.main.model.MainTab;
+import com.netease.nim.demo.main.reminder.ReminderId;
+import com.netease.nim.demo.main.reminder.ReminderItem;
 import com.netease.nim.demo.main.reminder.ReminderManager;
 import com.netease.nim.demo.session.SessionHelper;
-import com.netease.nim.demo.session.extension.GuessAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
 import com.netease.nim.uikit.business.recent.RecentContactsCallback;
 import com.netease.nim.uikit.business.recent.RecentContactsFragment;
+import com.netease.nim.uikit.common.ToastHelper;
 import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nimlib.sdk.NIMClient;
@@ -32,6 +34,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,37 @@ public class SessionListFragment extends MainTabFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         onCurrent();
+
+        sHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fragment==null){
+                    KLog.d("asdfghjkl","fragment==null");
+                }
+
+                if (fragment.yanzhengxiaoxi==null){
+                    KLog.d("asdfghjkl","yanzhengxiaoxi==null");
+                }
+
+                if (fragment!=null&&fragment.yanzhengxiaoxi!=null){
+                    int unreadCount = SystemMessageUnreadManager.getInstance().getSysMsgUnreadCount();
+                    fragment.yanzhengxiaoxi.setText("验证消息--====-"+unreadCount);
+                    fragment.yanzhengxiaoxi.setOnClickListener(it ->{
+                        SystemMessageActivity.start(getActivity());
+                    });
+                }
+            }
+        },1000);
+
+        ReminderManager.getInstance().registerUnreadNumChangedCallback(item -> {
+            if (item.getId() != ReminderId.CONTACT) {
+                return;
+            }
+
+            if (fragment!=null&&fragment.yanzhengxiaoxi!=null){
+                fragment.yanzhengxiaoxi.setText("验证消息---"+item.unread());
+            }
+        });
     }
 
     @Override
@@ -74,7 +108,6 @@ public class SessionListFragment extends MainTabFragment {
     protected void onInit() {
         findViews();
         registerObservers(true);
-
         addRecentContactsFragment();
     }
 
@@ -207,6 +240,7 @@ public class SessionListFragment extends MainTabFragment {
             @Override
             public void onItemClick(RecentContact recent) {
                 // 回调函数，以供打开会话窗口时传入定制化参数，或者做其他动作
+                KLog.d("asdfghjkl", "会话id是----" + recent.getContactId());
                 switch (recent.getSessionType()) {
                     case P2P:
                         SessionHelper.startP2PSession(getActivity(), recent.getContactId());
@@ -223,10 +257,7 @@ public class SessionListFragment extends MainTabFragment {
             public String getDigestOfAttachment(RecentContact recentContact, MsgAttachment attachment) {
                 // 设置自定义消息的摘要消息，展示在最近联系人列表的消息缩略栏上
                 // 当然，你也可以自定义一些内建消息的缩略语，例如图片，语音，音视频会话等，自定义的缩略语会被优先使用。
-                if (attachment instanceof GuessAttachment) {
-                    GuessAttachment guess = (GuessAttachment) attachment;
-                    return guess.getValue().getDesc();
-                } else if (attachment instanceof StickerAttachment) {
+                 if (attachment instanceof StickerAttachment) {
                     return "[贴图]";
                 } else if (attachment instanceof SnapChatAttachment) {
                     return "[阅后即焚]";

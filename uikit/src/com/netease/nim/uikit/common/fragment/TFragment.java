@@ -18,6 +18,8 @@ public abstract class TFragment extends Fragment {
 
     private boolean destroyed;
 
+    public static Handler sHandler=new Handler();
+
     protected final boolean isDestroyed() {
         return destroyed;
     }

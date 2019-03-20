@@ -5,11 +5,12 @@ import android.os.Bundle;
 import com.netease.nim.demo.R;
 import com.netease.nim.demo.main.model.MainTab;
 import com.netease.nim.demo.main.viewholder.FuncViewHolder;
+import com.netease.nim.uikit.api.model.contact.ContactsCustomization;
 import com.netease.nim.uikit.business.contact.ContactsFragment;
 import com.netease.nim.uikit.business.contact.core.item.AbsContactItem;
 import com.netease.nim.uikit.business.contact.core.viewholder.AbsContactViewHolder;
 import com.netease.nim.uikit.common.activity.UI;
-import com.netease.nim.uikit.api.model.contact.ContactsCustomization;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -27,17 +28,15 @@ public class ContactListFragment extends MainTabFragment {
         setContainerId(MainTab.CONTACT.fragmentId);
     }
 
+    @Override
+    protected void onInit() {
+        addContactFragment();  // 集成通讯录页面
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         onCurrent(); // 触发onInit，提前加载
-    }
-
-    @Override
-    protected void onInit() {
-        addContactFragment();  // 集成通讯录页面
     }
 
     // 将通讯录列表fragment动态集成进来。 开发者也可以使用在xml中配置的方式静态集成。
@@ -64,6 +63,7 @@ public class ContactListFragment extends MainTabFragment {
 
             @Override
             public void onFuncItemClick(AbsContactItem item) {
+                KLog.d("asdfghjkl", "通讯录功能项");
                 FuncViewHolder.FuncItem.handle(getActivity(), item);
             }
         });

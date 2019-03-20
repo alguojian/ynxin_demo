@@ -276,10 +276,6 @@ public class SettingsActivity extends UI implements SettingsAdapter.SwitchChange
             case TAG_PRIVATE_CONFIG:
                 startActivity(new Intent(this, PrivatizationConfigActivity.class));
                 break;
-
-            case TAG_MSG_MIGRATION:
-                startActivity(new Intent(this, MsgMigrationActivity.class));
-                break;
             default:
                 break;
         }

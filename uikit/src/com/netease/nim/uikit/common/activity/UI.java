@@ -35,6 +35,7 @@ public abstract class UI extends AppCompatActivity {
         super.onStart();
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

@@ -1558,7 +1558,8 @@ int id voice_trans_text 0x7f0b01b7
 int id watch_image_view 0x7f0b01b8
 int id wrap 0x7f0b01b9
 int id wrap_content 0x7f0b01ba
-int id yixin_profile_buddy_operations 0x7f0b01bb
+int id yanzhengxiaoxi 0x7f0b01bb
+int id yixin_profile_buddy_operations 0x7f0b01bc
 int integer abc_config_activityDefaultDur 0x7f0c0001
 int integer abc_config_activityShortDur 0x7f0c0002
 int integer app_bar_elevation_anim_duration 0x7f0c0003

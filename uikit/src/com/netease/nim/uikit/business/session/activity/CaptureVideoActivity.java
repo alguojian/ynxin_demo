@@ -135,6 +135,7 @@ public class CaptureVideoActivity extends UI implements SurfaceHolder.Callback {
         }
     };
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFormat(PixelFormat.TRANSLUCENT); // 使得窗口支持透明度

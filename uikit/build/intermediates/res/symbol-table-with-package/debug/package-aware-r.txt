@@ -1559,6 +1559,7 @@ id voice_trans_text
 id watch_image_view
 id wrap
 id wrap_content
+id yanzhengxiaoxi
 id yixin_profile_buddy_operations
 integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur

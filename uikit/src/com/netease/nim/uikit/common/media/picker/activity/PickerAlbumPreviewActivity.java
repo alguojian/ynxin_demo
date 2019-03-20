@@ -95,6 +95,7 @@ public class PickerAlbumPreviewActivity extends UI implements OnClickListener, O
 
     private int mutiSelectLimitSize;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nim_picker_image_preview_activity);

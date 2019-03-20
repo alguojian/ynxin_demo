@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.netease.nim.demo.team.activity.AdvancedTeamJoinActivity;
 import com.netease.nim.uikit.common.ToastHelper;
 
 import com.netease.nim.avchatkit.AVChatProfile;
@@ -47,12 +48,16 @@ import com.netease.nim.uikit.support.permission.annotation.OnMPermissionNeverAsk
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.SystemMessageObserver;
 import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.team.TeamService;
+import com.netease.nimlib.sdk.team.model.Team;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -77,7 +82,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private int scrollState;
@@ -93,9 +97,11 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         }
     };
 
-
-    public static void start(Context context) {
-        start(context, null);
+    // 注销
+    public static void logout(Context context, boolean quit) {
+        Intent extra = new Intent();
+        extra.putExtra(EXTRA_APP_QUIT, quit);
+        start(context, extra);
     }
 
     public static void start(Context context, Intent extras) {
@@ -106,13 +112,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
             intent.putExtras(extras);
         }
         context.startActivity(intent);
-    }
-
-    // 注销
-    public static void logout(Context context, boolean quit) {
-        Intent extra = new Intent();
-        extra.putExtra(EXTRA_APP_QUIT, quit);
-        start(context, extra);
     }
 
     @Override
@@ -128,18 +127,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
             return;
         }
         init();
-    }
-
-    private void init() {
-        observerSyncDataComplete();
-        findViews();
-        setupPager();
-        setupTabs();
-        registerMsgUnreadInfoObserver(true);
-        registerSystemMessageObservers(true);
-        requestSystemMessageUnreadCount();
-        initUnreadCover();
-        requestBasicPermission();
     }
 
     private boolean parseIntent() {
@@ -184,6 +171,27 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         return false;
     }
 
+    private void init() {
+        observerSyncDataComplete();
+        findViews();
+        setupPager();
+        setupTabs();
+        registerMsgUnreadInfoObserver(true);
+        registerSystemMessageObservers(true);
+        requestSystemMessageUnreadCount();
+        initUnreadCover();
+        requestBasicPermission();
+    }
+
+    private void onLogout() {
+        Preferences.saveUserToken("");
+        // 清理缓存&注销监听
+        LogoutHelper.logout();
+        // 启动登录
+        LoginActivity.start(this);
+        finish();
+    }
+
     private void observerSyncDataComplete() {
         boolean syncCompleted = LoginSyncDataStatusObserver.getInstance().observeSyncDataCompletedEvent(new Observer<Void>() {
             @Override
@@ -226,7 +234,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         tabs.setOnTabClickListener(adapter);
         tabs.setOnTabDoubleTapListener(adapter);
     }
-
 
     /**
      * 注册未读消息数量观察者
@@ -290,79 +297,12 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
                 .request();
     }
 
-    private void onLogout() {
-        Preferences.saveUserToken("");
-        // 清理缓存&注销监听
-        LogoutHelper.logout();
-        // 启动登录
-        LoginActivity.start(this);
-        finish();
-    }
-
-    private void selectPage() {
-        if (scrollState == ViewPager.SCROLL_STATE_IDLE) {
-            adapter.onPageSelected(pager.getCurrentItem());
-        }
-    }
-
-    /**
-     * 设置最近联系人的消息为已读
-     * <p>
-     * account, 聊天对象帐号，或者以下两个值：
-     * {@link MsgService#MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
-     * {@link MsgService#MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
-     */
-    private void enableMsgNotification(boolean enable) {
-        boolean msg = (pager.getCurrentItem() != MainTab.RECENT_CONTACTS.tabIndex);
-        if (enable | msg) {
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-        } else {
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
-        }
-    }
-
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_menu, menu);
-        super.onCreateOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                break;
-            case R.id.create_normal_team:
-                ContactSelectActivity.Option option = TeamHelper.getCreateContactSelectOption(null, 50);
-                NimUIKit.startContactSelector(MainActivity.this, option, REQUEST_CODE_NORMAL);
-                break;
-            case R.id.create_regular_team:
-                ContactSelectActivity.Option advancedOption = TeamHelper.getCreateContactSelectOption(null, 50);
-                NimUIKit.startContactSelector(MainActivity.this, advancedOption, REQUEST_CODE_ADVANCED);
-                break;
-            case R.id.search_advanced_team:
-                AdvancedTeamSearchActivity.start(MainActivity.this);
-                break;
-            case R.id.add_buddy:
-                AddFriendActivity.start(MainActivity.this);
-                break;
-            case R.id.search_btn:
-                GlobalSearchActivity.start(MainActivity.this);
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        parseIntent();
+    public void onDestroy() {
+        super.onDestroy();
+        registerMsgUnreadInfoObserver(false);
+        registerSystemMessageObservers(false);
+        DropManager.getInstance().destroy();
     }
 
     @Override
@@ -381,10 +321,20 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         enableMsgNotification(false);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.clear();
+    /**
+     * 设置最近联系人的消息为已读
+     * <p>
+     * account, 聊天对象帐号，或者以下两个值：
+     * {@link MsgService#MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+     * {@link MsgService#MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+     */
+    private void enableMsgNotification(boolean enable) {
+        boolean msg = (pager.getCurrentItem() != MainTab.RECENT_CONTACTS.tabIndex);
+        if (enable | msg) {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        } else {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        }
     }
 
     @Override
@@ -397,11 +347,88 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        registerMsgUnreadInfoObserver(false);
-        registerSystemMessageObservers(false);
-        DropManager.getInstance().destroy();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+//            case R.id.about:
+//                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+//                break;
+            case R.id.create_normal_team://加入群
+//                ContactSelectActivity.Option option = TeamHelper.getCreateContactSelectOption(null, 50);
+//                NimUIKit.startContactSelector(MainActivity.this, option, REQUEST_CODE_NORMAL);
+
+                addTeamChat();
+
+                break;
+            case R.id.create_regular_team://创建群
+                ContactSelectActivity.Option advancedOption = TeamHelper.getCreateContactSelectOption(null, 50);
+                NimUIKit.startContactSelector(MainActivity.this, advancedOption, REQUEST_CODE_ADVANCED);
+                break;
+//            case R.id.search_advanced_team:
+//                AdvancedTeamSearchActivity.start(MainActivity.this);
+//                break;
+//            case R.id.add_buddy:
+//                AddFriendActivity.start(MainActivity.this);
+//                break;
+//            case R.id.search_btn:
+//                GlobalSearchActivity.start(MainActivity.this);
+//                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 申请加入群聊，这是应该设置群加入为允许所有人加入，不需要审核等
+     */
+    private void addTeamChat() {
+
+        NIMClient.getService(TeamService.class).applyJoinTeam("1633136075", null).setCallback(new RequestCallback<Team>() {
+            @Override
+            public void onSuccess(Team team) {
+                String toast = getString(R.string.team_join_success, team.getName());
+                ToastHelper.showToast(MainActivity.this, toast);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                //仅仅是申请成功
+                if (code == ResponseCode.RES_TEAM_APPLY_SUCCESS) {
+                    ToastHelper.showToast(MainActivity.this, R.string.team_apply_to_join_send_success);
+                } else if (code == ResponseCode.RES_TEAM_ALREADY_IN) {
+                    ToastHelper.showToast(MainActivity.this, R.string.has_exist_in_team);
+                } else if (code == ResponseCode.RES_TEAM_LIMIT) {
+                    ToastHelper.showToast(MainActivity.this, R.string.team_num_limit);
+                } else {
+                    ToastHelper.showToast(MainActivity.this, "failed, error code =" + code);
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected boolean displayHomeAsUpEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_menu, menu);
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.clear();
     }
 
     @Override
@@ -422,14 +449,19 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         } else if (requestCode == REQUEST_CODE_ADVANCED) {
 
             final ArrayList<String> selected = data.getStringArrayListExtra(ContactSelectActivity.RESULT_DATA);
-
-            for (String s : selected) {
-                System.out.println("--------"+s);
-                 KLog.d("asdfghjkl",s);
-            }
-
             TeamCreateHelper.createAdvancedTeam(MainActivity.this, selected);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        parseIntent();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @Override
@@ -443,6 +475,12 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         tabs.onPageSelected(position);
         selectPage();
         enableMsgNotification(false);
+    }
+
+    private void selectPage() {
+        if (scrollState == ViewPager.SCROLL_STATE_IDLE) {
+            adapter.onPageSelected(pager.getCurrentItem());
+        }
     }
 
     @Override
@@ -459,11 +497,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
         if (tab != null) {
             tabs.updateTab(tab.tabIndex, item);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
@@ -485,11 +518,6 @@ public class MainActivity extends UI implements ViewPager.OnPageChangeListener, 
             e.printStackTrace();
         }
         MPermission.printMPermissionResult(false, this, BASIC_PERMISSIONS);
-    }
-
-    @Override
-    protected boolean displayHomeAsUpEnabled() {
-        return false;
     }
 
 }

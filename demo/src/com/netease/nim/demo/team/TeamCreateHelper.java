@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.netease.nim.demo.R;
+import com.netease.nim.uikit.business.team.activity.AdvancedTeamInfoActivity;
 import com.netease.nim.uikit.common.ToastHelper;
 
 import com.netease.nim.demo.DemoCache;
@@ -14,6 +16,7 @@ import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.friend.constant.VerifyType;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
@@ -23,6 +26,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
+import com.netease.nimlib.sdk.team.constant.VerifyTypeEnum;
 import com.netease.nimlib.sdk.team.model.CreateTeamResult;
 import com.netease.nimlib.sdk.team.model.Team;
 
@@ -107,6 +111,9 @@ public class TeamCreateHelper {
         TeamTypeEnum type = TeamTypeEnum.Advanced;
         HashMap<TeamFieldEnum, Serializable> fields = new HashMap<>();
         fields.put(TeamFieldEnum.Name, teamName);
+        fields.put(TeamFieldEnum.VerifyType, VerifyTypeEnum.Free);
+
+
         NIMClient.getService(TeamService.class).createTeam(fields, type, "", memberAccounts).setCallback(
                 new RequestCallback<CreateTeamResult>() {
                     @Override
@@ -178,11 +185,8 @@ public class TeamCreateHelper {
         NIMClient.getService(MsgService.class).saveMessageToLocal(msg, true);
 
         // 发送后，稍作延时后跳转
-        new Handler(context.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                SessionHelper.startTeamSession(context, team.getId()); // 进入创建的群
-            }
+        new Handler(context.getMainLooper()).postDelayed(() -> {
+            SessionHelper.startTeamSession(context, team.getId()); // 进入创建的群
         }, 50);
     }
 }

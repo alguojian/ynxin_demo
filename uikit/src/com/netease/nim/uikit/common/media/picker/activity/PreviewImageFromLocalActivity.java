@@ -74,6 +74,7 @@ public class PreviewImageFromLocalActivity extends UI {
         return intent;
     }
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nim_preview_image_from_local_activity);

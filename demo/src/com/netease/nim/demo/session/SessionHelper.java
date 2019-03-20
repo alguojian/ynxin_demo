@@ -15,15 +15,10 @@ import com.netease.nim.demo.session.activity.MessageHistoryActivity;
 import com.netease.nim.demo.session.activity.MessageInfoActivity;
 import com.netease.nim.demo.session.extension.CustomAttachParser;
 import com.netease.nim.demo.session.extension.CustomAttachment;
-import com.netease.nim.demo.session.extension.GuessAttachment;
 import com.netease.nim.demo.session.extension.SnapChatAttachment;
 import com.netease.nim.demo.session.extension.StickerAttachment;
 import com.netease.nim.demo.session.search.SearchMessageActivity;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderAVChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderDefCustom;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderFile;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderGuess;
-import com.netease.nim.demo.session.viewholder.MsgViewHolderSnapChat;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderSticker;
 import com.netease.nim.demo.session.viewholder.MsgViewHolderTip;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -49,7 +44,6 @@ import com.netease.nimlib.sdk.avchat.constant.AVChatType;
 import com.netease.nimlib.sdk.avchat.model.AVChatAttachment;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -184,29 +178,30 @@ public class SessionHelper {
             p2pCustomization.withSticker = true;
 
             // 定制ActionBar右边的按钮，可以加多个
-            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
-            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
-                }
-            };
-            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
+//            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
+//            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
+//                @Override
+//                public void onClick(Context context, View view, String sessionId) {
+//                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
+//                }
+//            };
+//            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
 
-            SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-
-                    MessageInfoActivity.startActivity(context, sessionId); //打开聊天信息
-                }
-            };
-
-
-            infoButton.iconId = R.drawable.nim_ic_message_actionbar_p2p_add;
-
-            buttons.add(cloudMsgButton);
-            buttons.add(infoButton);
-            p2pCustomization.buttons = buttons;
+            //去除担任聊天时的右上角的跳转到聊天信息的页面
+//            SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
+//                @Override
+//                public void onClick(Context context, View view, String sessionId) {
+//
+//                    MessageInfoActivity.startActivity(context, sessionId); //打开聊天信息
+//                }
+//            };
+//
+//
+//            infoButton.iconId = R.drawable.nim_ic_message_actionbar_p2p_add;
+//
+//            buttons.add(cloudMsgButton);
+//            buttons.add(infoButton);
+//            p2pCustomization.buttons = buttons;
         }
 
         return p2pCustomization;
@@ -254,18 +249,18 @@ public class SessionHelper {
             myP2pCustomization.actions = actions;
             myP2pCustomization.withSticker = true;
             // 定制ActionBar右边的按钮，可以加多个
-            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
-            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
-                }
-            };
-
-            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
-
-            buttons.add(cloudMsgButton);
-            myP2pCustomization.buttons = buttons;
+//            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
+//            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
+//                @Override
+//                public void onClick(Context context, View view, String sessionId) {
+//                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
+//                }
+//            };
+//
+//            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
+//
+//            buttons.add(cloudMsgButton);
+//            myP2pCustomization.buttons = buttons;
         }
         return myP2pCustomization;
     }
@@ -311,29 +306,29 @@ public class SessionHelper {
             };
 
             // 定制ActionBar右边的按钮，可以加多个
-            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
-            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
-                }
-            };
-            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
-
-            SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
-                @Override
-                public void onClick(Context context, View view, String sessionId) {
-
-                    RobotProfileActivity.start(context, sessionId); //打开聊天信息
-                }
-            };
-
-
-            infoButton.iconId = R.drawable.nim_ic_actionbar_robot_info;
-
-            buttons.add(cloudMsgButton);
-            buttons.add(infoButton);
-            robotCustomization.buttons = buttons;
+//            ArrayList<SessionCustomization.OptionsButton> buttons = new ArrayList<>();
+//            SessionCustomization.OptionsButton cloudMsgButton = new SessionCustomization.OptionsButton() {
+//                @Override
+//                public void onClick(Context context, View view, String sessionId) {
+//                    initPopuptWindow(context, view, sessionId, SessionTypeEnum.P2P);
+//                }
+//            };
+//            cloudMsgButton.iconId = R.drawable.nim_ic_messge_history;
+//
+//            SessionCustomization.OptionsButton infoButton = new SessionCustomization.OptionsButton() {
+//                @Override
+//                public void onClick(Context context, View view, String sessionId) {
+//
+//                    RobotProfileActivity.start(context, sessionId); //打开聊天信息
+//                }
+//            };
+//
+//
+//            infoButton.iconId = R.drawable.nim_ic_actionbar_robot_info;
+//
+//            buttons.add(cloudMsgButton);
+//            buttons.add(infoButton);
+//            robotCustomization.buttons = buttons;
         }
 
         return robotCustomization;

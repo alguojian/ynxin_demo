@@ -144,12 +144,11 @@ public class WelcomeActivity extends UI {
             // 已经登录过了，处理过来的请求
             Intent intent = getIntent();
             if (intent != null) {
+                //这里是application配置的，有推送时跳转到welcome页面，这里做判断是否含有推送过来的intent数据
                 if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
                     parseNotifyIntent(intent);
                     return;
-                } else if (NIMClient.getService(MixPushService.class).isFCMIntent(intent)) {
-                    parseFCMNotifyIntent(NIMClient.getService(MixPushService.class).parseFCMPayload(intent));
-                } else if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) || intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT)) {
+                 } else if (intent.hasExtra(AVChatExtras.EXTRA_FROM_NOTIFICATION) || intent.hasExtra(AVChatActivity.INTENT_ACTION_AVCHAT)) {
                     parseNormalIntent(intent);
                 }
             }
@@ -173,6 +172,10 @@ public class WelcomeActivity extends UI {
         return !TextUtils.isEmpty(account) && !TextUtils.isEmpty(token);
     }
 
+    /**
+     * 有推送过来时，直接跳转到会话页面
+     * @param intent
+     */
     private void parseNotifyIntent(Intent intent) {
         ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
         if (messages == null || messages.size() > 1) {
@@ -182,18 +185,6 @@ public class WelcomeActivity extends UI {
         }
     }
 
-    private void parseFCMNotifyIntent(String payloadString) {
-        Map<String, String> payload = JSON.parseObject(payloadString, Map.class);
-        String sessionId = payload.get(DemoMixPushMessageHandler.PAYLOAD_SESSION_ID);
-        String type = payload.get(DemoMixPushMessageHandler.PAYLOAD_SESSION_TYPE);
-        if (sessionId != null && type != null) {
-            int typeValue = Integer.valueOf(type);
-            IMMessage message = MessageBuilder.createEmptyMessage(sessionId, SessionTypeEnum.typeOfValue(typeValue), 0);
-            showMainActivity(new Intent().putExtra(NimIntent.EXTRA_NOTIFY_CONTENT, message));
-        } else {
-            showMainActivity(null);
-        }
-    }
 
     private void parseNormalIntent(Intent intent) {
         showMainActivity(intent);
